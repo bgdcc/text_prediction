@@ -14,7 +14,7 @@ text_df = pd.read_csv("fake_or_real_news.csv")
 text = list(text_df.text.values)
 joined_text=" ".join(text)
 
-partial_text = joined_text[:10000]
+partial_text = joined_text[:100000]
 
 tokenizer = RegexpTokenizer(r"\w+")
 tokens = tokenizer.tokenize(partial_text.lower())
@@ -44,8 +44,8 @@ model.add(LSTM(128))
 model.add(Dense(len(unique_tokens)))
 model.add(Activation('softmax'))
 
-model.compile(loss = "categorical_crossentropy", optimizer = RMSprop(learning_rate=0.01), metrics=['accuracy'])
-model.fit(X, y, batch_size = 128, epochs = 10, shuffle = True)
+model.compile(loss = "categorical_crossentropy", optimizer = RMSprop(learning_rate=0.001), metrics=['accuracy'])
+model.fit(X, y, batch_size = 128, epochs = 50, shuffle = True)
 
 model.save('my_model.h5')
 model = load_model('my_model.h5')
