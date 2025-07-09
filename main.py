@@ -7,14 +7,15 @@ from nltk.tokenize import RegexpTokenizer
 
 from tensorflow import keras
 from keras.models import Sequential, load_model
-from keras.layers import LSTM, Dense, Activation
+from keras.layers import Embedding, LSTM, Dense, Activation
+from keras.utils import to_categorical
 from keras.optimizers import RMSprop
 
 text_df = pd.read_csv("fake_or_real_news.csv")
 text = list(text_df.text.values)
 joined_text=" ".join(text)
 
-partial_text = joined_text[:100000]
+partial_text = joined_text[:10000]
 
 tokenizer = RegexpTokenizer(r"\w+")
 tokens = tokenizer.tokenize(partial_text.lower())
@@ -42,13 +43,14 @@ model = Sequential()
 model.add(LSTM(128, input_shape=(n_words, len(unique_tokens)), return_sequences=True))
 model.add(LSTM(128))
 model.add(Dense(len(unique_tokens)))
+model.add(Dense(len(unique_tokens)))
 model.add(Activation('softmax'))
 
 model.compile(loss = "categorical_crossentropy", optimizer = RMSprop(learning_rate=0.001), metrics=['accuracy'])
-model.fit(X, y, batch_size = 128, epochs = 50, shuffle = True)
+model.fit(X, y, batch_size = 64, epochs = 20, shuffle = True)
 
-model.save('my_model.h5')
-model = load_model('my_model.h5')
+model.save('my_model.keras')
+model = load_model('my_model.keras')
 
 def predict_next_word(input_text, n_best):
     input_text = input_text.lower()
@@ -61,6 +63,6 @@ def predict_next_word(input_text, n_best):
 
     return np.argpartition(predictions, -n_best)[-n_best:]
 
-possible = predict_next_word("He will have to look into this thing and he", 5)
+possible = predict_next_word("The president of the United States has decided to go", 5)
 
 print([unique_tokens[idx] for idx in possible])
