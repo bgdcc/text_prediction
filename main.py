@@ -7,16 +7,20 @@ from nltk.tokenize import RegexpTokenizer
 
 from tensorflow import keras
 from keras.models import Sequential, load_model
-from keras.layers import Embedding, LSTM, Dense, Activation
+from keras.layers import LSTM, Dense, Activation
 from keras.utils import to_categorical
 from keras.optimizers import RMSprop
 
+# Extract the data from the file
 text_df = pd.read_csv("fake_or_real_news.csv")
 text = list(text_df.text.values)
 joined_text=" ".join(text)
 
-partial_text = joined_text[:10000]
+# Use the first x lines
+first_x_lines = 100000
+partial_text = joined_text[:first_x_lines]
 
+# Tokenize all words and ensure they are unique
 tokenizer = RegexpTokenizer(r"\w+")
 tokens = tokenizer.tokenize(partial_text.lower())
 
@@ -43,11 +47,10 @@ model = Sequential()
 model.add(LSTM(128, input_shape=(n_words, len(unique_tokens)), return_sequences=True))
 model.add(LSTM(128))
 model.add(Dense(len(unique_tokens)))
-model.add(Dense(len(unique_tokens)))
 model.add(Activation('softmax'))
 
-model.compile(loss = "categorical_crossentropy", optimizer = RMSprop(learning_rate=0.001), metrics=['accuracy'])
-model.fit(X, y, batch_size = 64, epochs = 20, shuffle = True)
+model.compile(loss = "categorical_crossentropy", optimizer = RMSprop(learning_rate=0.01), metrics=['accuracy'])
+model.fit(X, y, batch_size = 64, epochs = 50, shuffle = True)
 
 model.save('my_model.keras')
 model = load_model('my_model.keras')
