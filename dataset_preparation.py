@@ -7,15 +7,38 @@ def detect_first_uppercase(line):
 
     return newline
 
-file = open("movie_lines.txt", "r", encoding = "latin1")
+def finish_the_line(line):
+    newline = ""
+    newerline = ''
+    for letter_id in range(len(line)):
+        if line[letter_id] == "+" and line[letter_id + 1] == " ":
+            newline += line[letter_id + 2:]
+            newerline += newline.replace("\n", "").replace(".", "").replace("\"", "").replace("!", "").replace("?", "")
 
-lines = []
-new_lines = []
+    return newerline
 
-for line in file:
-    lines.append(line)
+def prepare_the_file(modified_lines):
+    with open('modified_lines.txt', 'w') as f:
+        for item in modified_lines:
+            f.write(f"{item}\n")
 
-for line in lines:
-    new_lines.append(detect_first_uppercase(line))
+def main():
+    file = open("movie_lines.txt", "r", encoding = "latin1")
 
-print(new_lines)    
+    lines = []
+    new_lines = []
+    modified_lines = []
+
+    for line in file:
+        lines.append(line)
+
+    for line in lines:
+        new_lines.append(detect_first_uppercase(line))
+
+    for line in new_lines:
+        modified_lines.append(finish_the_line(line))
+
+    prepare_the_file(modified_lines)    
+
+if __name__ == "__main__":
+    main()
