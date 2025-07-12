@@ -13,7 +13,7 @@ def finish_the_line(line):
     for letter_id in range(len(line)):
         if line[letter_id] == "+" and line[letter_id + 1] == " ":
             newline += line[letter_id + 2:]
-            newerline += newline.replace("\n", "").replace(".", "").replace("\"", "").replace("!", "").replace("?", "")
+            newerline += newline.replace("\n", "")
 
     return newerline
 
