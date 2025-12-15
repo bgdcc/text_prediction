@@ -1,4 +1,4 @@
-# text_prediction
-A program whose purpose is predicting the next word of a written text.
+# TensorFlow Text Prediction Model Prototype
+This project implements a next-word prediction system. It includes all necessary code, preprocessing routines, and dataset setup for training a language model. 
 
-The project is about 70% complete. The model has not yet been trained due to high computational requirements.
+While the model is currently untrained, it is ready to be trained to generate likely next-word predictions for text sequences. Designed as a foundation for experimentation with NLP and machine learning techniques.
